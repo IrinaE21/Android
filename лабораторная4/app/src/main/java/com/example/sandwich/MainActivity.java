@@ -14,14 +14,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Cat murzik = new Cat();
-        murzik.name = "Мурзик";
-        murzik.age = 9;
-        murzik.color = Color.RED;
 
-        //Конвертируем JSON в объект
+        String jsonText = "{\"name\":\"Мурзик\",\"color\":-16777216,\"age\":9}";
+
+        //Конвертируем объект в JSON
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
-        Log.i("GSON", gson.toJson(murzik));
+        Cat murzik = gson.fromJson(jsonText, Cat.class);
+        Log.i("GSON", "Имя: " + murzik.name + "\nВозраст: " + murzik.age);
     }
+
 }
