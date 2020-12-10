@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         rv_view.setLayoutManager(mLayoutManager);
 
-         SandAdapter = new SandAdapter(SandwichList);
+        SandAdapter adapter = new SandAdapter(SandwichList);
         rv_view.setAdapter(adapter);
     }
 }
