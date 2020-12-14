@@ -5,13 +5,13 @@
         tools:context=".MainActivity">
 
         <item
-            android:id="@+id/click_btn"
+            android:id="@+id/tv_btn"
             android:title="ButtonClick" />
         <item
-            android:id="@+id/m_event"
+            android:id="@+id/tv_event"
             android:title="MotionEvent" />
         <item
-            android:id="@+id/cmn_g"
+            android:id="@+id/tv_gest"
             android:title="CommonGestures" />
 
 </menu>
