@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Calculation</string>
+    <string name="text_percent">15%</string>
+    <string name="text_tip">Tip</string>
+    <string name="text_total">Total</string>
+    <string name="text_hint">Enter amount</string>
+    <string name="tip_1">Чаевые</string>
+    <string name="Total_1">"Итого "</string>
+</resources>
