@@ -1,18 +1,22 @@
 package com.example.photogallery.db;
 
+
+
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
 
 import com.example.photogallery.model.Photo;
 
 import java.util.List;
+import androidx.room.Query;
 
-import retrofit2.http.Query;
 
 @Dao
 public interface PhotosDao {
+
     @Query("SELECT * FROM Photo")
     public List<Photo> LoadAll();
 

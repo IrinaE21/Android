@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.PrimaryKey;
 import androidx.room.Entity;
 
+@Entity
 public class Photo {
     @NonNull
     @PrimaryKey
