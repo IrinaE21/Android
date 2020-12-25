@@ -11,7 +11,7 @@ import androidx.room.Query;
 import com.example.photogallery.model.Photo;
 
 import java.util.List;
-import androidx.room.Query;
+
 
 
 @Dao

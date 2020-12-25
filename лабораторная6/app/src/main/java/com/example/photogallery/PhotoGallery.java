@@ -1,8 +1,11 @@
 package com.example.photogallery;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Dao;
+import androidx.room.Room;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,6 +16,8 @@ import android.widget.Toast;
 
 import com.example.photogallery.api.FlickrAPI;
 import com.example.photogallery.api.ServiceAPI;
+import com.example.photogallery.db.PhotosDB;
+import com.example.photogallery.db.PhotosDao;
 import com.example.photogallery.model.Photo;
 import com.example.photogallery.model.Response;
 
@@ -28,6 +33,9 @@ public class PhotoGallery extends AppCompatActivity {
     RecyclerView r_view;
     Response respon;
     Context context;
+    PhotosDao DAO;
+    PhotosDB DB;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +44,15 @@ public class PhotoGallery extends AppCompatActivity {
         r_view = findViewById(R.id.r_view);
         r_view.setLayoutManager(new GridLayoutManager(this,3));
         context = this;
+        DB = Room.databaseBuilder(context,PhotosDB.class,"database").allowMainThreadQueries().build();
+        DAO = DB.photoDao();
         Retrofit retrofit = ServiceAPI.getRetrofit();
         retrofit.create(FlickrAPI.class) .getRecent().enqueue(new Callback<Response>() {
             @Override
             public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
                 respon = response.body();
                 List<Photo> ph = respon.getPhotos().getPhoto();
-                adapter = new PhotoAdapter(ph,context);
+                adapter = new PhotoAdapter(ph,context,DAO);
                 r_view.setAdapter(adapter);
 
                 Toast.makeText(PhotoGallery.this, "GOOD REQUEST",Toast.LENGTH_SHORT).show();
@@ -72,7 +82,7 @@ public class PhotoGallery extends AppCompatActivity {
                     public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
                         respon = response.body();
                         List<Photo> ph = respon.getPhotos().getPhoto();
-                        adapter = new PhotoAdapter(ph,context);
+                        adapter = new PhotoAdapter(ph,context, DAO);
                         r_view.setAdapter(adapter);
 
                         Toast.makeText(PhotoGallery.this, "GOOD REQUEST",Toast.LENGTH_SHORT).show();
@@ -83,7 +93,7 @@ public class PhotoGallery extends AppCompatActivity {
 
                     }
                 });
-                return false;
+                return true;
             }
 
             @Override
@@ -93,5 +103,36 @@ public class PhotoGallery extends AppCompatActivity {
         });
 
         return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case R.id.OnlineDB:
+                Retrofit retrofit = ServiceAPI.getRetrofit();
+                retrofit.create(FlickrAPI.class) .getRecent().enqueue(new Callback<Response>() {
+                    @Override
+                    public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+                        respon = response.body();
+                        List<Photo> ph = respon.getPhotos().getPhoto();
+                        adapter = new PhotoAdapter(ph,context,DAO);
+                        r_view.setAdapter(adapter);
+
+                        Toast.makeText(PhotoGallery.this, "GOOD REQUEST",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Response> call, Throwable t) {
+
+                    }
+                });
+                return true;
+            case R.id.LocalDB:
+                List<Photo> ph = DAO.LoadAll();
+                adapter = new PhotoAdapter(ph,context,DAO);
+                r_view.setAdapter(adapter);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
